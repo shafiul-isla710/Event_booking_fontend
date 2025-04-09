@@ -41,8 +41,10 @@
             </template>
 
         <template class="flex gap-5" v-else>
-          <router-link :to="{name:'member_dashboard'}" class=""
-          >Dashboard</router-link>
+          <router-link v-if="userType == 'admin'" to="/admin/admin-profile" class=""
+          >Admin-Dashboard</router-link>
+          <router-link v-if="userType == 'user'" :to="{name:'member_dashboard'}" class=""
+          >Member-Dashboard</router-link>
           <button @click="logout()"  id="navAction"
                        class="px-8 py-2 mx-auto mt-2 font-bold text-gray-800 bg-white rounded-lg shadow opacity-75 lg:mx-0 hover:underline lg:mt-0">Logout</button>
         </template>
@@ -60,13 +62,19 @@
 <script setup>
 import {RouterLink,useRouter} from "vue-router";
 import {computed} from "vue";
+import {ref} from "vue";
 
 const router = useRouter();
-
 
 const login=computed(()=>{
   return localStorage.getItem('token')?true:false;
 })
+
+const userType = computed(()=>{
+  const userData = JSON.parse(localStorage.getItem('user'));
+  return userData.role == 'admin'? 'admin' : 'user';
+})
+
 const logout=()=>{
   localStorage.removeItem('token');
   localStorage.removeItem('user');
@@ -74,7 +82,6 @@ const logout=()=>{
     return window.location.reload();
   });
 }
-
 
 
 </script>

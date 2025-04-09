@@ -49,13 +49,9 @@
             <button @click="handleBooking(event)" class="mt-10 w-full bg-indigo-500 text-white font-semibold py-2 rounded-lg hover:bg-indigo-600 transition">Booking Now</button>
           </div>
 
-
         </div>
-
       </div>
-
     </div>
-
   </section>
 
 </template>
@@ -101,7 +97,6 @@ const handleBooking = (event) =>{
       query:{'eventId':event.id}
     })
     toast.success("Already logged in!")
-
   }
 
 }

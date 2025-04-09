@@ -91,9 +91,17 @@ const onSubmit = async()=>{
       localStorage.setItem('user',JSON.stringify(response.data.data));
 
       setTimeout(()=>{
-        router.push('/member-dashboard').then(()=>{
-        return  window.location.reload();
-        })
+
+        if(response.data.data.role == 'admin'){
+          router.push('/admin/admin-profile').then(()=>{
+            return window.location.reload();
+          })
+        }
+        else{
+          router.push('/member-dashboard').then(()=>{
+            return  window.location.reload();
+          })
+        }
       },1000)
     }
 

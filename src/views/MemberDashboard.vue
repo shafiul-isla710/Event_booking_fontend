@@ -24,7 +24,7 @@
       </div>
 
       <div>
-        <h3 class="text-lg font-semibold text-gray-700">Your Bookings</h3>
+        <router-link to="booking-table" class="text-lg font-semibold text-gray-700">Your Bookings</router-link>
         <table class="w-full mt-2 border-collapse border border-gray-300">
           <thead>
           <tr class="bg-gray-200">
@@ -33,17 +33,13 @@
             <th class="border border-gray-300 p-2">Status</th>
           </tr>
           </thead>
-          <tbody>
-          <tr class="bg-white">
-            <td class="border border-gray-300 p-2">Web Development Workshop</td>
-            <td class="border border-gray-300 p-2">20th March</td>
-            <td class="border border-gray-300 p-2 text-green-600">Confirmed</td>
+          <tbody >
+          <tr class="bg-white" v-for="(booking, index) in bookings" :key="index">
+            <td class="border border-gray-300 p-2">{{booking.event.title}}</td>
+            <td class="border border-gray-300 p-2">{{booking.event.start_date}}</td>
+            <td class="border border-gray-300 p-2">{{booking.status}}</td>
           </tr>
-          <tr class="bg-white">
-            <td class="border border-gray-300 p-2">Laravel Conference</td>
-            <td class="border border-gray-300 p-2">25th March</td>
-            <td class="border border-gray-300 p-2 text-yellow-600">Pending</td>
-          </tr>
+
           </tbody>
         </table>
       </div>
@@ -58,6 +54,7 @@
 <script setup>
 
 import {onMounted, ref} from "vue";
+import api from "@/api/axios.js";
 
 const loginUser = ref(null);
 const apiUrl = 'http://127.0.0.1:8000/';
@@ -66,6 +63,26 @@ onMounted(async()=>{
   loginUser.value = JSON.parse(user)
 
 })
+const bookings = ref([]);
 
+onMounted(async ()=>{
+
+  const user = localStorage.getItem("user");
+  loginUser.value = JSON.parse(user);
+  const response = await api.get(`/booking-user/${loginUser.value.id}`);
+
+  if(response.status){
+    bookings.value = response.data.data;
+  }
+})
+
+const isBooking = () =>{
+   if(!bookings.value){
+     return false;
+   }
+   else{
+     return true;
+   }
+}
 
 </script>
